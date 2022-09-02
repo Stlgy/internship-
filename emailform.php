@@ -23,6 +23,9 @@ if (isset($_POST['submit'])) {
         if (!preg_match("/^[A-Za-z .'-]+$/", $_POST["subject"])) {
             $subject_error = 'Assunto invalido!';
         }
+        if (strlen($_POST["subject"] ) === 0) {
+            $message_error = 'O seu e-mail não assunto';
+        }
         if (strlen($_POST["message"] ) === 0) {
             $message_error = 'O seu e-mail não tem conteúdo';
         }
