@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
             $subject_error = 'Assunto invalido!';
         }
         if (strlen($_POST["subject"] ) === 0) {
-            $message_error = 'O seu e-mail não assunto';
+            $message_error = 'O seu e-mail não tem assunto';
         }
         if (strlen($_POST["message"] ) === 0) {
             $message_error = 'O seu e-mail não tem conteúdo';
