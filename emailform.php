@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
             $to = 'ideiasfrescas@gmail.com';
             $body = 'De: ' .  $_POST["name"] . "\r\n" .
                     'E-mail: ' . $_POST["email"] . "\r\n" .
-                    'Assunto: ' . $_POST["subject"] . "r\n" .
+                    'Assunto: ' . $_POST["subject"] . "\r\n" .
                     'Mensagem: ' . $_POST["message"];
             if (mail($to, $subject, $body)) {
                 $msg = "E-mail enviado com sucesso";
