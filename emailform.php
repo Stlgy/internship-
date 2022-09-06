@@ -10,8 +10,7 @@
             $_POST["subject"] = test_input($_POST["subject"]);
             $_POST["message"] = test_input($_POST["message"]);
             
-            //$zone= date_default_timezone_set('Europe/Lisbon');
-            $date ->setTimezone(new DateTimeZone('Europe/Lisbon'));
+           
             $date= DateTime::createFromFormat('d/m/Y H:i:s',$date);
            
             function test_input($data)
