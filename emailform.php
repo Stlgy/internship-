@@ -74,9 +74,9 @@
                        
                             
             if (mail($to, $subject, $body, $headers)) {
-                $msg = "E-mail enviado com sucesso";
+                header("E-mail enviado com sucesso");
             } else {
-                $msg = "Não foi possível enviar o seu e-mail, por favor tente mais tarde.";
+                header("Não foi possível enviar o seu e-mail, por favor tente mais tarde.");
             }
         }
         ?>
