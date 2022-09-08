@@ -52,21 +52,45 @@ set_time_limit(0);
         </tr>
          <?php
          $res = SQL::run("SELECT * FROM ".BDPX."_produtos");
-            if ($res->num_rows >0){
-                $i = 0;
-                while($row = $res->fetch_assoc()){
-                    if($i %2 == 0){
-                        
-                        echo <tr class ="even"><td><?php $row['id_produto'] ?> </td></tr >
-                    }else{
-                        ?>
-                        <tr class="odd"><td><?php $row['id_produto'] ?>
-                        </td></tr >
-                        
-                 }
-                 $i++;
-                }
-                
+         
+         if ($res->num_rows > 0)
+         {
+            $i = 0;
+             
+            while($row = $res->fetch_assoc())
+            {
+            ?>
+                   // <tr class="<?php $i % 2 == 0 ? echo 'even' : echo 'odd' ?> ">
+                  <tr class="<?php $i % 2 == 0 ? even : odd">
+                    <td>$row['id_produto']</td>
+                    <td>$row['id_cliente']</td>
+                    <td>$row['referencia']</td>
+                    <td>$row['codigo_barras']</td>
+                    <td>$row['nome']</td>
+                    <td>$row['descricao']</td>
+                    <td>$row['link']</td>
+                    <td>$row['link_imagem']</td>
+                    <td>$row['disponibilidade']</td>
+                    <td>$row['preco']</td>
+                    <td>$row['preco_promocao']</td>
+                    <td>$row['marca']</td>
+                    <td>$row['marca_vendedor']</td>
+                    <td>$row['categoria']</td>
+                    <td>$row['stock']</td>
+                    <td>$row['preco_portes_normal']</td>
+                    <td>$row['prazo_entrega_normal']</td>
+                    <td>$row['prazo_entrega-min']</td>
+                    <td>$row['prazo_entrega_max']</td>
+                    <td>$row['prazo_preparacao_min']</td>
+                    <td>$row['prazo_preparacao_max']</td>
+                    <td>$row['tamanho']</td>
+                    <td>$row['condicao']</td>
+                    <td>$row['cor']</td>
+                    <td>$row['faixa_etaria']</td>
+                    <td>$row['genero']</td>
+                  </tr>
+             <?php
+             $i++
             }
             ?>
     </table>
