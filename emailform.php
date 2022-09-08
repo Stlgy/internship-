@@ -1,5 +1,8 @@
 <?php
 set_time_limit(0);
+ini_set("display_errors","On"); //faz com que o PHP emita todos os erros que existam durante a execução do script
+ini_set("display_startup_errors","On"); //faz com que o PHP emita todos os erros que estejam a impedir a execução do script
+error_reporting(E_ALL); //ativar a emissão de todo o tipo de mensagens de aviso e erros.
 define('BDS', 'localhost');
 define('BDN', 'ifreshhost15_estagio');
 define('BDU', 'ifreshhost15_estagio');
@@ -7,7 +10,18 @@ define('BDP', 'agosto2022#');
 define('BDPX', 'exportador');
 define('IDIOMA', "pt");
 
+require '../vendor/autoload.php';
+
 include("../includes/class_utils.php");
+
+
+ function test_input($data){
+            $data = trim($data);
+            $data = stripslashes($data);
+            return $data;
+        }
+ 
+     
 
 if (isset($_POST['submit'])) {
     $_POST = filter_var_array($_POST, FILTER_SANITIZE_STRING);
@@ -19,15 +33,10 @@ if (isset($_POST['submit'])) {
         $_POST["subject"] = test_input($_POST["subject"]);
         $_POST["message"] = test_input($_POST["message"]);
 
-
+        $date="";
         $date = DateTime::createFromFormat('d-m-Y H:i:s', $date);
 
-        function test_input($data)
-        {
-            $data = trim($data);
-            $data = stripslashes($data);
-            return $data;
-        }
+       
         if (!preg_match("/^[A-Za-z .'-]+$/", $_POST["name"])) {
             $name_error = 'Nome invalido!';
         }
@@ -54,7 +63,8 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
         'Mensagem: ' . $_POST["message"];
 
     $headers = 'De: ' . $_POST["email"] . "\r\n" .
-               'Assunto: ' . $_POST["subject"] . $data->format('d-m-Y:i:s') . "h" . "\r\n";
+              'Assunto: ' . $_POST["subject"] . $data->format('d-m-Y:i:s') . "h" . "\r\n";
+               
             
     $sendMail = (mail($to, $subject, $body, $headers));
     if (!$sendMail) {
@@ -74,6 +84,7 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
             echo SQL::$error;
             
 }
+
 
 ?>
 <!doctype html>
