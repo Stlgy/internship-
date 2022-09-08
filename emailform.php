@@ -7,6 +7,8 @@ define('BDP', 'agosto2022#');
 define('BDPX', 'exportador');
 define('IDIOMA', "pt");
 
+include("../includes/class_utils.php");
+
 if (isset($_POST['submit'])) {
     $_POST = filter_var_array($_POST, FILTER_SANITIZE_STRING);
     $name = $email = $subject = $message = "";
@@ -52,23 +54,26 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
         'Mensagem: ' . $_POST["message"];
 
     $headers = 'De: ' . $_POST["email"] . "\r\n" .
-        'Assunto: ' . $_POST["subject"] . $data->format('d-m-Y:i:s') . "h" . "\r\n";
-
-    if (mail($to, $subject, $body, $headers)) {
-        $result = '<div class= "alert-sucess">E-mail enviado com sucesso</div>)';
+               'Assunto: ' . $_POST["subject"] . $data->format('d-m-Y:i:s') . "h" . "\r\n";
+            
+    $sendMail = (mail($to, $subject, $body, $headers));
+    if (!$sendMail) {
+        echo '<div class= "alert-fail">Não foi possível enviar o seu e-mail, por favor tente mais tarde."</div>';
     } else {
-        $result = '<div class= "alert-fail">Não foi possível enviar o seu e-mail, por favor tente mais tarde."</div>';
+        echo '<div class= "alert-sucess">E-mail enviado com sucesso</div>)';
     }
-}
 
-$resultado =  SQL::run("INSERT INTO " . BDPX . "_contactos(nome, email, assunto, mensagem) 
+    $res =  SQL::run("INSERT INTO ".BDPX."_contactos(id_contacto, nome, email, assunto, mensagem) 
             VALUES(
                     NULL,
-                    '{$_POST["name"]}', 
-                    '{$_POST["email"]}',
-                    '{$_POST["subject"]}',
-                    '{$_POST["message"]} ')   
+                    '" . $_POST["name"] . "',
+                    '" . $_POST["email"] . "',
+                    '" . $_POST["subject"] . "',
+                    '" . $_POST["message"] . "')   
             ");
+            echo SQL::$error;
+            
+}
 
 ?>
 <!doctype html>
@@ -94,8 +99,6 @@ $resultado =  SQL::run("INSERT INTO " . BDPX . "_contactos(nome, email, assunto,
         <?php if (isset($message_error)) echo '<p>' . $message_error . '</p>'; ?>
 
         <button type="submit" name="submit">Enviar</button>
-        <?php echo $result; ?>
-
     </form>
 </body>
 
