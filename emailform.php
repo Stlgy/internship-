@@ -78,7 +78,7 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
                     '" . $_POST["email"] . "',
                     '" . $_POST["subject"] . "',
                     '" . $_POST["message"] . "')");
-    echo SQL::$error;
+    //echo SQL::$error;
 }
 ?>
 
