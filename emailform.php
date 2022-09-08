@@ -1,7 +1,7 @@
 <?php
 set_time_limit(0);
-ini_set("display_errors","On"); //faz com que o PHP emita todos os erros que existam durante a execução do script
-ini_set("display_startup_errors","On"); //faz com que o PHP emita todos os erros que estejam a impedir a execução do script
+ini_set("display_errors", "On"); //faz com que o PHP emita todos os erros que existam durante a execução do script
+ini_set("display_startup_errors", "On"); //faz com que o PHP emita todos os erros que estejam a impedir a execução do script
 error_reporting(E_ALL); //ativar a emissão de todo o tipo de mensagens de aviso e erros.
 define('BDS', 'localhost');
 define('BDN', 'ifreshhost15_estagio');
@@ -14,14 +14,12 @@ require '../vendor/autoload.php';
 
 include("../includes/class_utils.php");
 
-
- function test_input($data){
-            $data = trim($data);
-            $data = stripslashes($data);
-            return $data;
-        }
- 
-     
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    return $data;
+}
 
 if (isset($_POST['submit'])) {
     $_POST = filter_var_array($_POST, FILTER_SANITIZE_STRING);
@@ -33,10 +31,10 @@ if (isset($_POST['submit'])) {
         $_POST["subject"] = test_input($_POST["subject"]);
         $_POST["message"] = test_input($_POST["message"]);
 
-        $date="";
-        $date = DateTime::createFromFormat('d-m-Y H:i:s', $date);
+        $date = date('m-d-Y H:i:s', time());
 
-       
+
+
         if (!preg_match("/^[A-Za-z .'-]+$/", $_POST["name"])) {
             $name_error = 'Nome invalido!';
         }
@@ -56,21 +54,21 @@ if (isset($_POST['submit'])) {
 }
 
 if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !isset($subject_error) && !isset($message_error)) {
-    $to = '';
+    $to = 'ines@ideiasfrescas.com';
+    $subject = $_POST["subject"];
     $body = 'De: ' .  $_POST["name"] . "\r\n" .
         'E-mail: ' . $_POST["email"] . "\r\n" .
         'Assunto: ' . $_POST["subject"] . "\r\n" .
-        'Mensagem: ' . $_POST["message"];
+        'Mensagem: ' . $_POST["message"] . "\r\n" .
+        'Data: ' . $date;
 
-    $headers = 'De: ' . $_POST["email"] . "\r\n" .
-              'Assunto: ' . $_POST["subject"] . $data->format('d-m-Y:i:s') . "h" . "\r\n";
-               
-            
-    $sendMail = (mail($to, $subject, $body, $headers));
+    $sendMail = (mail($to, $subject, $body));
     if (!$sendMail) {
-        echo '<div class= "alert-fail">Não foi possível enviar o seu e-mail, por favor tente mais tarde."</div>';
+        //echo '<div class= "alert-fail">Não foi possível enviar o seu e-mail, por favor tente mais tarde."</div>';
+        echo "<script>alert('Não foi possível enviar o seu e-mail, por favor tente mais tarde.');</script>";
     } else {
-        echo '<div class= "alert-sucess">E-mail enviado com sucesso</div>)';
+        //echo '<div class= "alert-sucess">E-mail enviado com sucesso</div>';
+        echo "<script>alert('E-mail enviado com sucesso');</script>";
     }
 
     $res =  SQL::run("INSERT INTO ".BDPX."_contactos(id_contacto, nome, email, assunto, mensagem) 
@@ -79,14 +77,11 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
                     '" . $_POST["name"] . "',
                     '" . $_POST["email"] . "',
                     '" . $_POST["subject"] . "',
-                    '" . $_POST["message"] . "')   
-            ");
-            echo SQL::$error;
-            
+                    '" . $_POST["message"] . "')");
+    echo SQL::$error;
 }
-
-
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -100,7 +95,7 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
     <p> Something something...</p>
 
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="name">Nome:</label>><input type="text" name="name" id="name" /><br />
+        <label for="name">Nome:</label><input type="text" name="name" id="name" /><br />
         <?php if (isset($name_error)) echo '<p>' . $name_error . '</p>'; ?>
         <label for="email">E-mail:</label><input type="text" name="email" id="email" /><br />
         <?php if (isset($email_error)) echo '<p>' . $email_error . '</p>'; ?>
@@ -112,5 +107,4 @@ if (isset($_POST['submit']) && !isset($name_error) && !isset($email_error) && !i
         <button type="submit" name="submit">Enviar</button>
     </form>
 </body>
-
 </html>
