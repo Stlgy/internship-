@@ -41,6 +41,8 @@ define('IDIOMA',"pt");
 
 <body>
     <table>
+        <thead>
+        <tbody>
         <tr>
             <th>id_produto</th>
             <th>id_cliente</th>
@@ -68,17 +70,20 @@ define('IDIOMA',"pt");
             <th>faixa_etaria</th>
             <th>genero</th>
         </tr>
-    
+        <tbody>
+    </head>
         <?php
             $res = SQL::run("SELECT * FROM ".BDPX."_produtos");
          
             if ($res && $res->num_rows > 0){
                 $i = 0;
-                while($row = $res->fetch_assoc()){
+                
                     
         ?>
+           
             <tr class = " <?php $i % 2 == 0 ? 'even' :  'odd' ?> ">
                         <?php
+                     while($row = $res->fetch_assoc()){   
                         echo "<td>" . $row['id_produto']."</td>";
                         echo "<td>" . $row['id_cliente']."</td>";
                         echo "<td>" . $row['referencia']."</td>";
@@ -105,7 +110,7 @@ define('IDIOMA',"pt");
                         echo "<td>" . $row['faixa_etaria']."</td>";
                         echo "<td>" . $row['genero']."</td>";
             echo"</tr>";
-            
+           
                 $i++;
                 }
             }
