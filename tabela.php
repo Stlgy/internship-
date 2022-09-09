@@ -11,7 +11,6 @@ define('BDPX','exportador');
 define('IDIOMA',"pt");
 
    require '../vendor/autoload.php';
-
    include("../includes/class_utils.php");
 
 ?>
@@ -35,7 +34,6 @@ define('IDIOMA',"pt");
         }
         tr:nth-child(even) {background-color: lightgrey;}
       
-   
    </style>
 </head>
 
@@ -76,9 +74,7 @@ define('IDIOMA',"pt");
             $res = SQL::run("SELECT * FROM ".BDPX."_produtos");
          
             if ($res && $res->num_rows > 0){
-                $i = 0;
-                
-                    
+                $i = 0;    
         ?>
            
             <tr class = " <?php $i % 2 == 0 ? 'even' :  'odd' ?> ">
@@ -110,7 +106,6 @@ define('IDIOMA',"pt");
                         echo "<td>" . $row['faixa_etaria']."</td>";
                         echo "<td>" . $row['genero']."</td>";
             echo"</tr>";
-           
                 $i++;
                 }
             }
