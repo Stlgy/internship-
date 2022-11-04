@@ -10,7 +10,7 @@
     <div class="parent">
         <div style="width:500px;">Parent
         <ul id= "lista1">
-            <li id="one" onover="changeStyle()"><span>I am the first one</span>
+            <li id="one"><span>I am the first one</span>
             </li>
             <li id="two">Second
             </li>
