@@ -1,5 +1,7 @@
 
 
+
+
 <!DOCTYPE html>
 <html>
 <head lang="pt">
@@ -46,24 +48,80 @@
 
         // on Hover change id="one" background-color with JQUERY
         
-        $(document).ready(function(){
+    /*     $(document).ready(function(){
             $("#one").hover(function(){
                 $(this).css("background","#00CED1");
             },
             function(){
                 $(this).css("background", "none");
             });
-        });
+        }); */
 
         // on Hover change id="one" background-color with JS
-        const ele = document.getElementById('two');
+       /*  const ele = document.getElementById('two');
         ele.addEventListener('mouseover',function handleMouseOver(){
             ele.style.backgroundColor = '#87CEFA';
         });
         ele.addEventListener('mouseout', function handleMouseOut(){
             ele.style.backgroundColor ="transparent";
-        });
-       
+        }); */
+        /* let listItems = document.querySelectorAll('li');
+            console.log(listItems);
+            // for(let i=0;i<listItems.length;i++){//n esquecer declarar i
+                
+                listItems[i].addEventListener('mouseover', function handleMouseOver(){
+                    listItems[i].style.backgroundColor = '#87CEFA';
+                });
+                listItems[i].addEventListener('mouseout', function handleMouseOut(){
+                    listItems[i].style.backgroundColor = 'transparent';
+                });
+            //} 
+            listItems.forEach(function callback(item, index) { //use the spread operator to convert it into an array:
+                item.addEventListener('mouseover', function handleMouseOver(){
+                    
+                    let thisPos = (index + 1) * 10;
+                    let red = (Math.random() * (200 - 100));
+                    let green = (Math.random() * (200 - 100));
+                    let blue = (Math.random() * (200 - 100));
+                    item.style.backgroundColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                   
+                });
+                item.addEventListener('mouseout', function handleMouseOut(){
+                    item.style.backgroundColor = 'transparent';
+                });
+
+            }); */
+        let listItems = document.querySelectorAll('li');
+            console.log(listItems);
+            listItems.forEach(function callback(item, index) { //use the spread operator to convert it into an array:
+                item.addEventListener('mouseover', function handleMouseOver(){
+                    /* const randColor = () =>  {
+                        let min = 1000;
+                        let max =  167777215;
+                        let randVal = Math.random() * (max - min) + min;
+                        return "#" + Math.floor(randVal).toString(16).padStart(6, '0').toUpperCase();
+                        } */
+                        const randColor = () =>  {
+                        let min = 50;
+                        let max = 245;
+                        let red = Math.random() * (max - min) + min;
+                        let green = Math.random() * (max - min) + min;
+                        let blue = Math.random() * (max - min) + min;
+                        return 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                        }
+                    item.style.backgroundColor = randColor();
+                    //let color_checker = "";
+                    
+                    /* do{
+                        color_checker=randColor();
+                    }while(color_checker=="" || color_checker =="#000000" || color_checker == "#ffffff")*/
+                    
+                    //item.style.backgroundColor = color_checker;
+                    //console.log(color_checker); 
+                });
+                item.addEventListener('mouseout', function handleMouseOut(){
+                    item.style.backgroundColor = 'transparent';/*  */
+                });
+            });        
     </script>
 </body>
-</html>
