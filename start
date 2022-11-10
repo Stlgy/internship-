@@ -1,0 +1,112 @@
+<?php
+    ini_set("log_errors", 1);
+    ini_set("display_errors","on");
+    ini_set("display_startup_errors","on");
+    error_reporting(E_ALL);
+
+    require_once("vendor/autoload.php");
+
+	session_start();
+
+	$CDNS = array('bo.ifhosting.net');
+	shuffle($CDNS);
+	/* MySQL */
+    define('BDS','localhost');
+    define('BDN','ifreshhost15_estagio');
+    define('BDU','ifreshhost15_estagio');
+    define('BDP','agosto2022#');
+    define('BDPX','exportador');// PYRE OF GODS. Great song!	
+	/* Variaveis de sistema */
+    
+    define('CT',dirname(__FILE__).'/');
+	define('REPO',dirname(CT)."/downloads/repo/");
+	define('PASTA',dirname(CT)."/downloads/");
+    define('TEMP',CT."temp");
+    define('LIVE', "/");
+	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+	define('BURL', $protocol.$_SERVER['HTTP_HOST']);
+	define('FULLBURL', $protocol.$_SERVER['HTTP_HOST'].LIVE);
+	define('C',str_replace('includes','controlo',__DIR__));
+	define('CP',basename($_SERVER['PHP_SELF'],".php"));
+	define('UNIQ',hash('sha1',$_SERVER['HTTP_HOST']));
+	define('CONTROLO',false);
+	define('IDIOMA_SITE','en');
+	define('LOCALES',array('en' => 'en_GB'));
+	//define('LOCALES',array('en' => 'en_GB', 'pt' => 'pt_PT', 'es' => 'es_ES'));
+	define('DEBUG',"webmaster@ideiasfrescas.com");
+    define('SECRET',BDPX);
+    
+    /**
+	 * Bloco que define o Idioma para o Backoffice, setlocale e gettext
+    */
+    if(CP != "router") {
+	    $iGet = (isset($_GET["idioma"]) && !empty($_GET["idioma"])) ? str_replace('/','',$_GET["idioma"]) : $iGet = IDIOMA_SITE;
+	    $iPre = ($iGet == IDIOMA_SITE) ? '' : $iGet.'/';
+		define('IDIOMA',$iGet);
+		define('PREURL',$iPre);
+		$locale = LOCALES[$iGet].".utf8";
+		$directory = dirname(__DIR__)."/locale/";
+		$domain = 'messages';
+
+		setlocale(LC_TIME,$locale);
+		setlocale(LC_MESSAGES,$locale);
+
+		bindtextdomain($domain, $directory);
+		textdomain($domain);
+		bind_textdomain_codeset($domain, 'utf8');
+
+		define('FULL_BURL',BURL.PREURL);
+    }
+
+	$GLOBALS["classes"] = array();
+	require_once(C."/includes/class_utils.php");
+    $sys = new sys_utils;
+    
+	$MODULOS = glob(C."/mods/*", GLOB_ONLYDIR);
+
+	/* foreach ($MODULOS as $class) {
+		$temp = explode('/',$class);
+		$class = array_pop($temp);
+		$temp = strtoupper($class);
+		$$temp = new $class;
+	} */
+
+	require_once(C."/includes/class_htm.php");
+    require_once(C."/includes/class_imagens.php");
+    
+    $htm = new sys_htm;
+   
+
+	//permitir acesso sem verificação de sessão
+	$allow_cps = array("index","remote","remote_sms");
+
+	define('IDIOMAS',json_decode($sys->cfg_ler("idiomas"),true));
+
+	if (empty($_SESSION[BDPX."_key"])) $_SESSION[BDPX."_key"] = hash("sha256",uniqid());    
+	
+    /*
+        Inicialização do Carrinho de Compras e Sessão do Cliente
+    */
+    if (!isset($_SESSION[BDPX."_usr"]) || isset($_GET["lg"])) {
+        $_SESSION[BDPX."_usr"] = 0;
+        $_SESSION[BDPX."_usr_subscricao"] = 0; // contem dados da subscrição Stripe atual para o cliente.
+        $_SESSION[BDPX."_usr_club"] = 0;
+
+    	if (isset($_GET["lg"])) {
+			header("Location: ".FULLBURL);
+			exit;
+		}
+    }
+    
+	function debugIdeias($number,$string,$file,$line,$context) {
+		$erro = array(
+			"number" => $number,
+			"string" => $string,
+			"file" => $file,
+			"line" => $line
+		);
+		mail(DEBUG, "Error - ".SECRET, var_export($erro, true));
+		return false;
+	}
+    
+?>
